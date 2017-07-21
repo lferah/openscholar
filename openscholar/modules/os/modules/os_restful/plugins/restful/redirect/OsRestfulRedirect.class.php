@@ -43,7 +43,23 @@ class OsRestfulRedirect extends \RestfulBase implements \RestfulDataProviderInte
       }
     }
 
+    // Saving to DB
     redirect_save($redirect);
+
+    // Build full drupal system url
+    if (isset($vsite->group->purl)) {
+      $full_redirect_url = $vsite->group->purl . '/' .$redirect->source;
+    } else {
+      $full_redirect_url = $redirect->source;
+    }
+
+    // Initiate the return message
+    $redirect->msg = '';
+    // Check for exiting url and then add a message
+    if (drupal_valid_path(drupal_get_normal_path($full_redirect_url))) {
+      $redirect->msg = 'The url already exists. If this is unintended, the redirected can be deleted below.';
+    }
+
     return $this->renderRedirect($redirect);
   }
 
@@ -71,7 +87,8 @@ class OsRestfulRedirect extends \RestfulBase implements \RestfulDataProviderInte
     return array(
       'id' => $redirect->rid,
       'path' => $redirect->source,
-      'target' => $redirect->redirect
+      'target' => $redirect->redirect,
+      'msg' => $redirect->msg
     );
   }
 }

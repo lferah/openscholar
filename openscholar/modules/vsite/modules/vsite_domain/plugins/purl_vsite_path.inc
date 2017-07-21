@@ -46,12 +46,15 @@ if (!class_exists('purl_vsite_path')) {
           }
 
           global $base_url;
-          $on_base_domain = preg_replace('~https?://~', '', $_SERVER['HTTP_HOST']) == parse_url(variable_get('purl_base_domain', $base_url),PHP_URL_HOST);
+          // HTTP_HOST includes port, but we want to remove it to make our comparisons with purl_base_domain.
+          $http_hostname = explode(':', $_SERVER['HTTP_HOST'])[0];
+
+          $on_base_domain = preg_replace('~https?://~', '', $http_hostname) == parse_url(variable_get('purl_base_domain', $base_url),PHP_URL_HOST);
           $clean_url = preg_replace('~https?://~', '', variable_get('purl_base_domain', $base_url));
           $temp = explode('/', $clean_url);
           $disabled_url = $space_found || in_array($settings->value, self::$disabled);
-          $custom_domain = strlen($vsite_domain) && preg_replace('~https?://~', '', $_SERVER['HTTP_HOST']) != $vsite_domain;
-          $host_url_match = !strlen($vsite_domain) && preg_replace('~https?://~', '', $_SERVER['HTTP_HOST']) != $temp[0];
+          $custom_domain = strlen($vsite_domain) && preg_replace('~https?://~', '', $http_hostname) != $vsite_domain;
+          $host_url_match = !strlen($vsite_domain) && preg_replace('~https?://~', '', $http_hostname) != $temp[0];
           if ($disabled_url || $custom_domain || $host_url_match) {
             unset($parsed[$site]);
             if (!$space_found && $on_base_domain && strlen($vsite_domain) && count(explode('/', $q)) < 2) {

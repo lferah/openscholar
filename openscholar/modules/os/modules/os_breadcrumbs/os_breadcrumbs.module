@@ -337,7 +337,7 @@ function _os_breadcrumbs_build_subsection_breadcrumb($menu_active_trail) {
     $short_title = _os_breadcrumbs_shorten_title($menu['title']);
     // Check for a parent menu item.
     if(_os_breadcrumbs_check_parents($menu['href']) != FALSE) {
-      $parent_links = _os_breadcrumbs_check_parents($menu['href']);
+      $parent_links = _os_breadcrumbs_check_parents($menu['href'], $max_parents = 1);
       if(isset($parent_links) && is_array($parent_links)) {
         $links = array_merge($links, $parent_links);
       }
@@ -574,7 +574,7 @@ function _os_breadcrumbs_check_custom_title($path) {
  * @params $path
  *  The path of the app.
  */
-function _os_breadcrumbs_check_parents($path) {
+function _os_breadcrumbs_check_parents($path, $max_parents = null) {
   // Load the menu file.
   ctools_include('menu','os');
 
@@ -608,6 +608,11 @@ function _os_breadcrumbs_check_parents($path) {
 
   // Flip the parent keys around.
   $parent_ids = array_reverse($parent_ids);
+
+  // Sometimes we need just one parent (so exclude grandparents, great grandparents, etc.)
+  if (isset($max_parents)) {
+    $parent_ids = array_slice($parent_ids, 0, $max_parents);
+  }
 
   foreach($parent_ids as $key => $menu_id) {
     $parent_link = vsite_menu_menu_link_load($menu_id);

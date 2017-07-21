@@ -134,7 +134,7 @@
         visibility: visible !important;
         background: none !important;
     }
-     #menu-bar #block-os-primary-menu li.menuparent ul[style*="visibility: hidden"] {
+     #menu-bar #block-os-primary-menu li.menuparent .open-submenu ~ ul {
      
         visibility: visible !important;
     

@@ -65,7 +65,7 @@ function os_events_field_default_field_instances() {
           'trim_length' => 600,
         ),
         'type' => 'os_text_trimmed',
-        'weight' => 1,
+        'weight' => 2,
       ),
       'title' => array(
         'label' => 'above',
@@ -174,7 +174,7 @@ function os_events_field_default_field_instances() {
           'show_repeat_rule' => 'show',
         ),
         'type' => 'date_default',
-        'weight' => 0,
+        'weight' => 1,
       ),
       'title' => array(
         'label' => 'above',
@@ -305,7 +305,7 @@ function os_events_field_default_field_instances() {
           'label' => 'Sign up for this event',
         ),
         'type' => 'registration_link',
-        'weight' => 10,
+        'weight' => 4,
       ),
       'links' => array(
         'label' => 'above',
@@ -343,7 +343,7 @@ function os_events_field_default_field_instances() {
           'label' => 'Registration: ',
         ),
         'type' => 'registration_link',
-        'weight' => 0,
+        'weight' => 3,
       ),
       'title' => array(
         'label' => 'above',
@@ -433,7 +433,7 @@ function os_events_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 5,
       ),
       'title' => array(
         'label' => 'above',
@@ -508,7 +508,7 @@ function os_events_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 3,
+        'weight' => 6,
       ),
       'title' => array(
         'label' => 'above',

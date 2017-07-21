@@ -25,7 +25,7 @@ function os_wysiwyg_wysiwyg_editor_settings_alter(&$settings, $context) {
   $flavors = os_theme_get_flavors();
   $theme = os_theme_get();
 
-  $theme_info = os_get_themes($theme);
+  $theme_info = os_get_themes($theme, 'vsite', FALSE);
 
   if ($theme_info->stylesheets) {
     // Adding the css of the theme.

@@ -30,7 +30,7 @@ function os_slideshow_boxes_plugins() {
 
 /**
  * Implelements hook_boxes_plugins_alter
- * 
+ *
  * Removes deprecated gallery slideshow from the new widgets list
  */
 function os_slideshow_boxes_plugins_alter(&$plugins) {
@@ -105,13 +105,13 @@ function os_slideshow_form_slideshow_slide_node_form_alter(&$form, &$state, $for
 
   //Hide additional settings that are no longer grouped as such
   foreach (array('revision_information', 'author', 'comment_settings', 'path', 'metatags', 'actions_top') as $elem) {
-    $form[$elem]['#type'] = 'hidden'; 
+    $form[$elem]['#type'] = 'hidden';
   }
 
   // Hide title. it will be automatically generated later.
   $form['title']['#type'] = 'hidden';
   $form['title']['#required'] = FALSE;
-  
+
   // Remove preview, diff buttons.
   foreach (array('preview', 'preview_changes') as $action) {
     if (isset($form['actions'][$action])) {
@@ -146,7 +146,7 @@ function os_slideshow_imagefield_crop_instance_alter(&$instance, $context) {
   elseif (isset($context['entity']) && isset($context['entity']->widget)) {
     $widget = $context['entity']->widget;
   }
-  
+
   if (isset($widget) && $box = boxes_box_load($widget)) {
     $layout = $box->options['layout'];
     $layouts = _os_slideshow_layouts();
@@ -226,15 +226,15 @@ function os_slideshow_handle_slide_update($nid, $widget, $action) {
  */
 function os_slideshow_node_presave($node) {
   if ($node->type == 'slideshow_slide') {
-    
+
     $lang = $node->language;
     if (($file = file_load($node->field_image[$lang][0]['fid'])) == FALSE) {
-      return;      
-    } 
+      return;
+    }
 
     // Set a default title.
     $node->title = isset($node->field_headline[$lang][0]) ? $node->field_headline[$lang][0]['value'] : $file->filename;
-    
+
     // Add og_group_ref to attached slide.
     if (empty($file->og_group_ref)) {
       $file->og_group_ref = $node->og_group_ref;
@@ -330,7 +330,7 @@ function os_slideshow_theme($existing, $type, $theme, $path) {
     'os_slideshow_widget_slideshow' => array(
       'template' => 'os_slideshow_widget_slideshow',
       'variables' => array(
-        'slides' => NULL,        
+        'slides' => NULL,
         'display_scrollbar' => NULL,
         'widget_height' => NULL,
       ),
@@ -389,7 +389,7 @@ function os_slideshow_preprocess_os_slideshow_slide(&$vars) {
   }
   $img = !empty($node->field_image[$lang]) ? $node->field_image[$lang][0]['uri'] : $node->field_image[LANGUAGE_NONE][0]['uri'];
   $img_vars = array('path' => $img, 'style_name' => $vars['style_name']);
-  
+
   if ($items = field_get_items('node', $node, 'field_slideshow_alt_text')) {
     $item = reset($items);
   }
@@ -428,7 +428,7 @@ function os_slideshow_preprocess_os_slideshow_slide(&$vars) {
 function os_slideshow_preprocess_os_slideshow_widget_slideshow(&$vars) {
   $slide_vars = array();
   foreach ($vars['slides'] as $key => $slide) {
-    $slide_vars['widget'] = $slide;    
+    $slide_vars['widget'] = $slide;
     $vars['slides'][$key] = theme('os_slideshow_widget_slide', $slide_vars);
   }
 }
@@ -596,15 +596,15 @@ function _os_slideshow_region_size($region, $get_row_widths = '') {
 
   $rows['content_second'] = $rows['content'];
   $rows['content_second']['main'] = 'content_second';
-  
+
   $rows['content_first'] = $rows['content'];
   $rows['content_first']['main'] = 'content_first';
-  
+
   // Default behavior.
   if (!$get_row_widths) {
     $plugin = context_get_plugin('reaction', 'block');
     foreach($rows as $row) {
-      if ($region != $row['main'] && !in_array($region, $row['sides'])) { 
+      if ($region != $row['main'] && !in_array($region, $row['sides'])) {
         continue;
       }
 
@@ -676,7 +676,7 @@ function _os_slideshow_layouts() {
  */
 function _os_slideshow_add_css() {
   ctools_include('themes', 'os');
-  $theme = os_get_themes(os_theme_get());
+  $theme = os_get_themes(os_theme_get(), 'vsite', FALSE);
   if ($file = @$theme->info['os']['os_slideshow']) {
     $css_file = drupal_get_path('theme', $theme->name) . $file;
   }

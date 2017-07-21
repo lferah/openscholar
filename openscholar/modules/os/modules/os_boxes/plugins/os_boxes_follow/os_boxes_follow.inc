@@ -387,7 +387,7 @@ function os_follow_default_networks() {
     'Google+'    => array(
       'title' => t('Google+'),
       'domain' => 'plus.google.com',
-      'offset' => 716,
+      'offset' => 722,
     ),
   );
 

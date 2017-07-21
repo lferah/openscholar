@@ -343,3 +343,10 @@ function os_events_update_7027() {
 function os_events_update_7028() {
   features_revert(array('os_events' => array('field_instance')));
 }
+
+/**
+ * Adjusting vocabulary display position
+ */
+function os_events_update_7029() {
+  features_revert(array('os_events' => array('field_instance')));
+}

@@ -23,6 +23,9 @@ function vsite_metatag_export_default() {
       'og:image' => array(
         'value' => '[node:field_site_logo]',
       ),
+      'twitter:image' => array(
+        'value' => '[node:field_site_logo]',
+      ),
     ),
   );
 
@@ -39,6 +42,9 @@ function vsite_metatag_export_default() {
       'og:image' => array(
         'value' => '[node:field_site_logo]',
       ),
+      'twitter:image' => array(
+        'value' => '[node:field_site_logo]',
+      ),
     ),
   );
 
@@ -53,6 +59,9 @@ function vsite_metatag_export_default() {
         'value' => 'company',
       ),
       'og:image' => array(
+        'value' => '[node:field_site_logo]',
+      ),
+      'twitter:image' => array(
         'value' => '[node:field_site_logo]',
       ),
     ),

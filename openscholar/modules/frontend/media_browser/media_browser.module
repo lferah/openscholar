@@ -98,7 +98,8 @@ function media_browser_library_alter(&$libs) {
       array('os_common', 'ng-file-upload'),
       array('os_common', 'auth'),
       array('os_common', 'angular-modal-service'),
-      array('os_common', 'locationFix')
+      array('os_common', 'locationFix'),
+      array('os_common', 'angularSlideables')
     ));
 
     $libs['media_browser']['css'] = array(

@@ -774,15 +774,6 @@ function os_events_process_node(&$variables) {
     return;
   }
 
-  // Move the terms to the top of the node display.
-  if(isset($variables['content']['og_vocabulary'])) {
-    if ($variables['elements']['#view_mode'] == 'teaser') {
-      $variables['content']['og_vocabulary']['#weight'] = 5;
-    } else {
-      $variables['content']['og_vocabulary']['#weight'] = 0;
-    }
-    
-  }
   // Move the event date above the event description.
   if(isset($variables['content']['field_date'])) {
     $variables['content']['field_date']['#weight'] = 0;
@@ -839,6 +830,18 @@ function os_events_process_node(&$variables) {
       }
     }
 
+    // Seperate $register from export link
+    $register_full_view_theme = '';
+    if ($register != '' && $variables['view_mode'] == 'full') {
+      if(isset($variables['content']['field_event_registration'])) {
+        $variables['content']['field_event_registration'][0]['#markup'] = $register;
+      } elseif(isset($variables['content']['og_vocabulary'])) {
+        $variables['content']['og_vocabulary'][0]['#markup'] =  '<div class="os-events-signup-full">' . $register . '</div>' . $variables['content']['og_vocabulary'][0]['#markup'];
+      } else {
+        $register_full_view_theme = $register;
+      }
+    }
+
     // Change the date markup if this is a recurring event.
     if ($variables['content']['field_date']['#items'][0]['rrule']) {
       $variables['content']['field_date'][0]['#markup'] = _os_events_style_recurring_event($variables['content']['field_date'][0]['#markup']);
@@ -851,12 +854,11 @@ function os_events_process_node(&$variables) {
     // Hiding the original registration link because we are using our own link
     // with a ctools modal effect and because we placing the registration link
     // in the export area.
-    hide($variables['content']['field_event_registration']);
 
     $ical = l(t('iCal'), 'calendar/single/' . $variables['node']->nid . '/export.ics', array('attributes' => array('class' => array('ical'))));
 
     $params = array(
-      'register' => $register,
+      'register' => $register_full_view_theme,
       'ical' => $ical,
       'subscribe' => $subscribe,
     );
@@ -2506,7 +2508,7 @@ function os_events_mail($key, &$message, $params) {
  */
 function os_events_mail_alter(&$message) {
   //Array for event mails
-  $eventEmailArr = array("broadcast","registration_confirmation","event_cancel_notification","event_time_updated_notification");
+  $eventEmailArr = array("broadcast","registration_confirmation","event_cancel_notification","event_time_updated_notification","user_mail","user_copy");
 
   //get user 1 email address as default from address
   $admin = user_load(1);
@@ -2520,30 +2522,49 @@ function os_events_mail_alter(&$message) {
 
     //Get the value of event creator email for all event related emails except broadcast.
     foreach($message['params'] as $param_key => $param_value){
-      if ($param_key == '@event_creator_email' || $param_key == '@event-creator-email'){
+      if ($param_key == '@event_creator_email' || $param_key == '@event-creator-email' || $param_key == '@event-creator-mail') {
        // Get event author event's author email address.
        $event_author_email = check_plain(trim($param_value));
       }
     }
 
     //Get the value of event creator email for broadcast.
-    if ($event_author_email == ""){
-      $event_author_email = $message['from'];
+    if ($event_author_email == "") {
+        $node = node_load($message['params']['context']['entity_id']);
+        $registration_settings = registration_entity_settings('node', $node->nid);
+
+      if($registration_settings['settings']['confirmation']) {
+        $event_author_email = $message['from'];
+      }
+      else {
+        $user = user_load($node->uid);
+        $event_author_email = $user->mail;
+      }
     }
 
     // Set default value of the "From" field to author of the event's e-mail
     $message['headers']['From'] = $message['from'] = $event_author_email;
 
     // Set the sender and return-path headers.
-    $message['headers']['Sender'] = $message['headers']['Return-Path'] = $message['headers']['From'];
+    $message['headers']['Sender'] = $message['headers']['Return-Path'] = $event_author_email;
   }
   else {
-
     // Set default value of the "From" field.
-    $message['headers']['From'] = $message['from'] = variable_get('site_from_email',$defaultMail);
+    if (!isset($message['headers']['From'])) {
+      $message['headers']['From'] = variable_get('site_from_email',$defaultMail);
+    }
+    if (!isset($message['from'])) {
+      $message['from'] = variable_get('site_from_email',$defaultMail);
+    }
 
-    //Set the sender and return-path headers.
-    $message['headers']['Sender'] = $message['headers']['Return-Path'] = $message['headers']['From'];
+    // Set default value of the "Sender" field.
+    if (!isset($message['headers']['Sender'])) {
+      $message['headers']['Sender'] = variable_get('site_from_email',$defaultMail);
+    }
+    // Set default value of the "Return-Path" field.
+    if (!isset($message['headers']['Return-Path'])) {
+      $message['headers']['Return-Path'] = variable_get('site_from_email',$defaultMail);
+    }
   }
 
   //Adding the footer physical address for all emails

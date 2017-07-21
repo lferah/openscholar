@@ -358,6 +358,7 @@ projects[restful][patch][] = "https://raw.githubusercontent.com/openscholar/open
 
 projects[redirect][subdir] = "contrib"
 projects[redirect][version] = 1.0-rc1
+projects[redirect][patch][] = "https://raw.githubusercontent.com/openscholar/openscholar/3bd4a15d6f6ada371ec14a43af72fa03d497184c/patches/redirect-9589-enable-redirection.patch"
 
 projects[robotstxt][subdir] = "contrib"
 projects[robotstxt][version] = "1.1"
@@ -416,7 +417,7 @@ projects[twitter_pull][version] = 1.0-rc4
 projects[twitter_pull][patch][] = "https://raw.github.com/openscholar/openscholar/cb4bfa4c382c3ef6d2c8a48c10d55695792c37d5/patches/twitter_pull-8577-retweet_option.patch"
 projects[twitter_pull][patch][] = "https://raw.githubusercontent.com/openscholar/openscholar/64dfc3710e7fb2494a69dad4013a14283afdcde2/patches/twitter_pull.class.inc_get-media_url.patch"
 projects[twitter_pull][patch][] = "https://raw.githubusercontent.com/openscholar/openscholar/0aaed15ed27b084508dfd7f247c7a9bcb3660603/patches/twitter_pull-distinguish_retweets.patch"
-projects[twitter_pull][patch][] = "https://raw.githubusercontent.com/openscholar/openscholar/6343fbeba1b1e0bbc3fcefaa2eddc79eaf79dd4b/patches/twitter_pull.class.inc-tweet-mode-extended.patch"
+projects[twitter_pull][patch][] = "https://raw.githubusercontent.com/openscholar/openscholar/1811fd556f5ef60be92a5b5249a81f652a73681c/patches/twitter_pull.class.inc-tweet-mode-extended.patch"
 
 projects[views][subdir] = "contrib"
 projects[views][version] = 3.8
@@ -591,6 +592,11 @@ libraries[angular_select2][type] = "libraries"
 libraries[angular_select2][download][type] = "get"
 libraries[angular_select2][download][url] = "https://github.com/angular-ui/ui-select/archive/v0.12.0.zip"
 libraries[angular_select2][patch][] = "https://raw.githubusercontent.com/openscholar/openscholar/ad2fd2d198e91ac9a77eacbae996579e55510a3a/patches/angular_select-7024-async.patch"
+
+libraries[angularSlideables][type] = "libraries"
+libraries[angularSlideables][download][type] = "file"
+libraries[angularSlideables][download][url] = "https://raw.githubusercontent.com/EricWVGG/AngularSlideables/master/angularSlideables.js"
+libraries[angularSlideables][patch][] = "https://raw.githubusercontent.com/openscholar/openscholar/719c14a04c389e75c16c9f5cf3da59a22a640d5d/patches/angularSlideables-wrap_file_in_jQuery_function_scope.patch"
 
 ; YUI js libraries
 libraries[yui][type] = "libraries"

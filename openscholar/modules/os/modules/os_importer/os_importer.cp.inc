@@ -223,6 +223,10 @@ function os_importer_cp_settings() {
         'rest_submit' => 'os_importer_file_submit',
         'submit_full_request' => TRUE,
       );
+      if ($node_type == 'biblio') {
+        $settings['os_importer_file_upload-biblio']['form']['#access'] = biblio_access('import');
+        $settings['os_importer_submit-biblio']['form']['#access'] = biblio_access('import');
+      }
     }
   }
   

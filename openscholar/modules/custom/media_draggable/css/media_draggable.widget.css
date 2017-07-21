@@ -28,7 +28,6 @@
     top: -5px;
 }
 .field-widget-media-draggable-file div {
-    white-space: nowrap;
     overflow: hidden;
 }
 .field-widget-media-draggable-file .file-list-single span {

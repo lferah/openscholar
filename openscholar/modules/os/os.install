@@ -980,3 +980,19 @@ function os_update_7051() {
 
   return t('Enabled OS content revisions module.');
 }
+
+/**
+ * Remove drush errors and warnings for
+ * "The following module is missing from the file system"
+ */
+function os_update_7052() {
+  remove_missing_modules_entry_from_DB();
+}
+
+/**
+ * Copy og:image metatag configs to twitter:image
+ */
+function os_update_7053() {
+  features_revert(array('os' => array('metatag')));
+}
+
