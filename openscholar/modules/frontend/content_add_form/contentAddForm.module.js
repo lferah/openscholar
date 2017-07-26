@@ -1,10 +1,39 @@
 (function() {
-  var m = angular.module('ContentAddForm', ['angularModalService', 'MediaBrowserField', 'formElement', 'os-buttonSpinner']);
+  var m = angular.module('ContentAddForm', ['angularModalService', 'redirectForm', 'MediaBrowserField', 'formElement', 'os-buttonSpinner']);
 
     /**
    * Fetches the content settings forms from the server and makes them available to directives and controllers
    */
   m.service('contentForm', ['$http', '$q', function ($http, $q, $httpParamSerializer) {
+    var data = {};
+
+    this.SettingsReady = function(form_name) {
+      var settingsForms = {};
+      var settings = {};
+
+      var queryArgs = {};
+      var promises = [];
+
+      if (Drupal.settings.spaces != undefined) {
+        if (Drupal.settings.spaces.id) {
+          queryArgs.vsite = Drupal.settings.spaces.id;
+        }
+      }
+
+      var baseUrl = Drupal.settings.paths.api;
+      var config = {
+        params: queryArgs
+      };
+
+      // $http returns a promise, which has a then function, which also returns a promise
+      var promise = $http.get(baseUrl+'/' + form_name +'/form', config).then(function (response) {
+        // The then function here is an opportunity to modify the response
+        // The return value gets picked up by the then in the controller.
+        return response.data;
+      });
+      // Return the promise to the controller
+      return promise;
+    }
 
   }])
 
@@ -22,8 +51,14 @@
 
     function link(scope, elem, attrs) {
 
-
       elem.bind('click', function (e) {
+
+        var str = e.currentTarget.id;
+        var form_name_arr = str.split('_');
+        var form_name = form_name_arr[0];
+        var form_title = form_name.charAt(0).toUpperCase() + form_name.slice(1);
+        scope.title = 'Create ' + form_title;
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -53,7 +88,7 @@
           }
         })
         .then(function (modal) {
-          dialogOptions.title = 'Hallo';
+          dialogOptions.title = scope.title;
           dialogOptions.close = function (event, ui) {
             modal.element.remove();
           }
@@ -73,6 +108,7 @@
         form: '@'
       }
     };
+
   }]);
 
 
@@ -80,6 +116,56 @@
    * The controller for the forms themselves
    */
   m.controller('contentAddFormController', ['$scope', '$sce', 'contentForm', 'buttonSpinnerStatus', 'form', 'close', function ($s, $sce, contentForm, bss, form, close) {
+    var formSettings = {};
+    $s.formId = form;
+
+    $s.formElements = {};
+    $s.formData = {};
+
+    $s.status = [];
+    $s.errors = [];
+    $s.columns = {};
+    $s.columnCount = 0;
+    $s.showSaveButton = true;
+
+    var form_name_arr = form.split('_');
+    var form_name = form_name_arr[0];
+    contentForm.SettingsReady(form_name).then(function(d){
+      var settingsRaw = d.data;
+      console.log(settingsRaw);
+       for (var k in settingsRaw) {
+         $s.formElements[k] = settingsRaw[k];
+         console.log($s.formElements[k]);
+       }
+
+      /*if (typeof settingsRaw.form_id['#value'] !== 'undefined') {
+        if(settingsRaw.form_id['#value'] == 'page_node_form') {
+          var attributes;
+          for (var k in settingsRaw) {
+            if(settingsRaw[k]['#type'] != 'fieldset' && settingsRaw[k]['#type'] != 'actions' && settingsRaw[k]['#type'] != '' && settingsRaw[k]['#type'] != 'hidden') {
+              console.log(settingsRaw[k]);
+              for (var j in settingsRaw[k]) {
+                if (j.indexOf('#') === 0 && (j != '#default_value')) {
+                  //console.log(settingsRaw[k][j]);
+                  var attr = j.substr(1, j.length);
+                  //console.log(attr);
+                  //console.log(settingsRaw[k]);
+                  attributes[attr] = settingsRaw[k][j];
+                  console.log(attributes[attr]);
+                }
+              }
+            }
+            //$s.formElements[k] = settingsRaw[attr];
+            /*if ($s.formElements[k].type == 'submit') {
+              $s.showSaveButton = false;
+            }
+          }
+        }
+      }*/
+
+
+    });
+
 
   }]);
 
