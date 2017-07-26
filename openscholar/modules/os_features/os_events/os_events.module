@@ -175,7 +175,7 @@ function os_events_gcal_create_calendar() {
 
   // The vsite group ID is stored in the state parameter
   $vsite = vsite_get_vsite($_GET["state"]);
-  $redirectUri = url('/calendar');
+  $redirectUri = url('/' . $vsite->group->purl . '/calendar');
   $client->setRedirectUri($redirectUri);
 
   $calendarService = new Google_Service_Calendar($client);
@@ -221,7 +221,7 @@ function os_events_gcal_create_calendar() {
   }
 
   drupal_set_message("Calendar export completed", 'Success');
-  drupal_goto(url('/calendar'));
+  drupal_goto(url('/' . $vsite->group->purl . '/calendar'));
 }
 
 /**
