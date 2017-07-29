@@ -214,14 +214,13 @@ function os_events_gcal_create_calendar() {
                         $e->_field_data['nid']['entity']->field_date[LANGUAGE_NONE][0]['timezone_db']);
     $dt2 = new DateTime($e->_field_data['nid']['entity']->field_date[LANGUAGE_NONE][0]['value2'] . ' ' .
                         $e->_field_data['nid']['entity']->field_date[LANGUAGE_NONE][0]['timezone_db']);
-    $calendarDateTime = new Google_Service_Calendar_EventDateTime();
-    $calendarDateTime->setDateTime($dt1->format(DateTime::RFC3339));
-    $event->setStart($calendarDateTime);
-    $calendarDateTime->setDateTime($dt2->format(DateTime::RFC3339));
-    $event->setEnd($calendarDateTime);
+    $calendarDateTimeStart = new Google_Service_Calendar_EventDateTime();
+    $calendarDateTimeEnd = new Google_Service_Calendar_EventDateTime();
+    $calendarDateTimeStart->setDateTime($dt1->format(DateTime::RFC3339));
+    $event->setStart($calendarDateTimeStart);
+    $calendarDateTimeEnd->setDateTime($dt2->format(DateTime::RFC3339));
+    $event->setEnd($calendarDateTimeEnd);
     $insertion_result = $calendarService->events->insert($calendar->getId(), $event);
-
-    error_log("EAM trace: " . __FILE__ . ":" . __LINE__ . ", \$insertion_result = " . var_export($insertion_result, true));
   }
 
   drupal_set_message("Calendar export completed", 'Success');
