@@ -219,7 +219,9 @@ function os_events_gcal_create_calendar() {
     $event->setStart($calendarDateTime);
     $calendarDateTime->setDateTime($dt2->format(DateTime::RFC3339));
     $event->setEnd($calendarDateTime);
-    $calendarService->events->insert($calendar->getId(), $event);
+    $insertion_result = $calendarService->events->insert($calendar->getId(), $event);
+
+    error_log("EAM trace: " . __FILE__ . ":" . __LINE__ . ", \$insertion_result = " . var_export($insertion_result, true));
   }
 
   drupal_set_message("Calendar export completed", 'Success');
