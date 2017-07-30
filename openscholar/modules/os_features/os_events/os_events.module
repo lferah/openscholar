@@ -197,6 +197,7 @@ function os_events_gcal_create_calendar() {
   $table = 'cache_views_data';
   $cid = 'og:node:%:os_events:feed_2:results:%';
   db_query("DELETE FROM {" . $table . "} WHERE cid LIKE '" . $cid . "'");
+  views_invalidate_cache();
 
   // Set the vsite space, since we've moved to the top-level docroot
   spaces_set_space($vsite);
