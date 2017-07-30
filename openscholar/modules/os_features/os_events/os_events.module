@@ -203,6 +203,8 @@ function os_events_gcal_create_calendar() {
   $vsite->activate_user_roles();
   $vsite->init_overrides();
 
+  error_log("EAM trace " . __FILE__ . ":" . __LINE__ . ", \$vsite = " . var_export($vsite, true));
+
   // Load the view so we can iterate over it's results
   // (Use reset = true to ensure we get a fresh view)
   if ($view = views_get_view($name, $reset = true)) {
@@ -216,7 +218,6 @@ function os_events_gcal_create_calendar() {
     $event->setDescription($e->_field_data['nid']['entity']->body[LANGUAGE_NONE][0]['value']);
     $event->setLocation($e->_field_data['nid']['entity']->field_event_location[LANGUAGE_NONE][0]['value']);
     $event->setSummary($e->_field_data['nid']['entity']->title);
-    //    $event->setTimezone?;
 
     $dt1 = new DateTime($e->_field_data['nid']['entity']->field_date[LANGUAGE_NONE][0]['value'] . ' ' .
                         $e->_field_data['nid']['entity']->field_date[LANGUAGE_NONE][0]['timezone_db']);
