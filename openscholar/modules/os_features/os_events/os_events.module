@@ -200,7 +200,8 @@ function os_events_gcal_create_calendar() {
   $vsite->init_overrides();
 
   // Load the view so we can iterate over it's results
-  if ($view = views_get_view($name)) {
+  // (Use reset = true to ensure we get a fresh view)
+  if ($view = views_get_view($name, $reset = true)) {
     $view->execute_display($display_id, $args);
   }
 
