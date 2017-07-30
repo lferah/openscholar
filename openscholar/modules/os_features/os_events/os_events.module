@@ -208,7 +208,9 @@ function os_events_gcal_create_calendar() {
   // Load the view so we can iterate over it's results
   // (Use reset = true to ensure we get a fresh view)
   if ($view = views_get_view($name, $reset = true)) {
-    $view->execute_display($display_id, $args);
+    #$view->execute_display($display_id, $args);
+    $view->set_display($display_id);
+    $view->preview($display_id, $args);
   }
 
   error_log("EAM trace " . __FILE__ . ":" . __LINE__ . ", \$view->result = " . var_export($view->result, true));
