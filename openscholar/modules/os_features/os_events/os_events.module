@@ -192,7 +192,11 @@ function os_events_gcal_create_calendar() {
   $args = array("upcoming", "all");
 
   # Ensure we're gathering fresh event data, in case the user just came from another vsite
-  cache_clear_all('ctools_export:views_view:os_events', 'cache_views', TRUE);
+  # cache_clear_all('ctools_export:views_view:os_events', 'cache_views', TRUE);
+  # cache_clear_all('og:node:%:os_events:feed_2:results', 'cache_views_data', TRUE);
+  $table = 'cache_views_data';
+  $cid = 'og:node:%:os_events:feed_2:results%';
+  db_query("DELETE FROM {" . $table . "} WHERE cid LIKE '" . $cid . "'");
 
   // Set the vsite space, since we've moved to the top-level docroot
   spaces_set_space($vsite);
