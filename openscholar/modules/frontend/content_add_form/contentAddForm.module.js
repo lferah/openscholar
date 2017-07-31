@@ -76,11 +76,11 @@
                 '</div>' +
               '</div>' +
             '</div>' +
-            '<div class="form-wrapper" ng-if="columnCount == 1">' +
+
               '<div class="form-item" ng-repeat="(key, field) in formElements | weight">' +
                 '<div form-element element="field" value="formData[key]"><span>placeholder</span></div>' +
               '</div>' +
-            '</div>' +
+
             '<div class="help-link" ng-bind-html="help_link"></div>' +
           '<div class="actions" ng-show="showSaveButton"><button type="submit" button-spinner="settings_form" spinning-text="Saving">Save</button><input type="button" value="Close" ng-click="close(false)"></div></form>',
           inputs: {
@@ -120,6 +120,7 @@
     $s.formId = form;
 
     $s.formElements = {};
+    $s.formSettings = {};
     $s.formData = {};
 
     $s.status = [];
@@ -131,12 +132,17 @@
     var form_name_arr = form.split('_');
     var form_name = form_name_arr[0];
     contentForm.SettingsReady(form_name).then(function(d){
-      var settingsRaw = d.data;
-      console.log(settingsRaw);
-       for (var k in settingsRaw) {
-         $s.formElements[k] = settingsRaw[k];
-         console.log($s.formElements[k]);
-       }
+      settingsRaw = d.data;
+      //console.log(settingsRaw);
+      for (var k in settingsRaw) {
+        if(settingsRaw[k]['#type'] == 'fieldset' || settingsRaw[k]['#type'] == 'actions' || settingsRaw[k]['#type'] == 'hidden') {
+          $s.formSettings[k] = settingsRaw[k];
+          console.log($s.formSettings[k]);
+        }
+        else if(settingsRaw[k]['type'] != 'undefined') {
+          $s.formElements[k] = settingsRaw[k];
+        }
+      }
 
       /*if (typeof settingsRaw.form_id['#value'] !== 'undefined') {
         if(settingsRaw.form_id['#value'] == 'page_node_form') {
