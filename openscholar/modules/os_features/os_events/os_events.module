@@ -191,10 +191,6 @@ function os_events_gcal_create_calendar() {
   $display_id = "feed_2";
   $args = array("upcoming", "all");
 
-  # Ensure we're gathering fresh event data (in case the user just came from another vsite)
-  //  cache_clear_all('*', 'cache_views', TRUE);
-  //  cache_clear_all('*', 'cache_views_data', TRUE);
-
   // Set the vsite space, since we've moved to the top-level docroot
   spaces_set_space($vsite);
   $vsite->activate_user_roles();
@@ -203,6 +199,8 @@ function os_events_gcal_create_calendar() {
   // Load the view so we can iterate over it's results
   // (Use reset = true to ensure we get a fresh view)
   if ($view = views_get_view($name)) {
+
+    # Ensure we're gathering fresh event data (in case the user just came from another vsite)
     $view->is_cacheable = FALSE;
     $view->execute_display($display_id, $args);
   }
