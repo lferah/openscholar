@@ -57,11 +57,12 @@ function os_software_os_app_info() {
  */
 function os_software_form_software_project_node_form_alter(&$form, &$form_state, $form_id) {
   $method_field_options = _os_software_packaging_method_options();
-  if (sizeof($method_field_options) > 1) {
-    return;
-  }
-
-  $form['#attached']['css'][] = drupal_get_path('module', 'os_software') . '/os_software.css';
+  unset($form['field_software_method']);
+  unset($form['field_rbuild_short_name']);
+  unset($form['field_software_repo']);
+  $form['packaging'] = array(
+      '#markup' => '<div class="form-item form-type-textfield form-item-title"><label>Packaging Method <span class="form-required" title="This field is required.">*</span></lable><div class="no-bold">Manual upload</div></div>',
+  );
   $form['actions']['submit']['#submit'][] = '_os_software_form_redirect';
 }
 
